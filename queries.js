@@ -1,3 +1,4 @@
+const Pool = require("pg").Pool
 const pool = new Pool({
   user: 'ryannagel',
   host: 'localhost',
@@ -15,6 +16,15 @@ const getCategories = (request, response) => {
   })
 }
 
+// const getCategoryName = (request, response) => {
+//   pool.query("SELECT json_object_agg(id, name) FROM categories", (error, results) => {
+//     if (error) {
+//       throw error
+//     }
+//     response.status(200).json(results.rows[0]['json_object_agg'])
+//   })
+// }
+
 const getMechanics = (request, response) => {
   pool.query("SELECT * FROM mechanics ORDER BY name ASC", (error, results) => {
     if (error) {
@@ -22,4 +32,22 @@ const getMechanics = (request, response) => {
     }
     response.status(200).json(results.rows)
   })
+}
+
+// const getMechanicName = (request, response) => {
+//   pool.query("SELECT json_object_agg(id, name) FROM mechanics", (error, results) => {
+//     if (error) {
+//       throw error
+//     }
+//     response.status(200).json(results.rows[0]['json_object_agg'])
+//   })
+// }
+
+const addToVault = () => {
+  
+}
+
+module.exports = {
+  getCategories,
+  getMechanics,
 }
