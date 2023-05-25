@@ -3,7 +3,8 @@ const bodyParser = require("body-parser")
 const app = express()
 const cors = require("cors")
 const db = require("./queries")
-const port = 8000
+const reg = require("./controllers/register")
+const port = process.env.PORT || 8000
 
 require("./configs/dotenv")
 const client = require("./configs/database")
@@ -32,6 +33,8 @@ app.use("/user", user)
 
 app.get("/categories", db.getCategories)
 app.get("/mechanics", db.getMechanics)
+
+app.post("/register", reg.register)
 
 app.listen(port, () => {
   console.log(`App running on port ${port}`)

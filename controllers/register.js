@@ -7,8 +7,8 @@ const jwt = require("jsonwebtoken")
 exports.register = async (req, res) => {
   const { username, password } = req.body
   try {
-    const data = await client.query(`SELECT * FROM users WHERE email=$1`, [
-      email,
+    const data = await client.query(`SELECT * FROM users WHERE username=$1`, [
+      username,
     ])
     const arr = data.rows
     if (arr.length != 0) {
@@ -28,7 +28,7 @@ exports.register = async (req, res) => {
         var flag = 1 //Declaring a flag
 
         //Inserting data into the database
-
+        console.log(user.username, user.password)
         client.query(
           `INSERT INTO users (username, password) VALUES ($1,$2);`,
           [user.username, user.password],
@@ -61,7 +61,7 @@ exports.register = async (req, res) => {
   } catch (err) {
     console.log(err)
     res.status(500).json({
-      error: "Database error while registring user!", //Database connection error
+      error: "Database error while registering user!", //Database connection error
     })
   }
 }
