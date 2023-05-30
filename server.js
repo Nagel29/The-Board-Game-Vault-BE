@@ -4,6 +4,7 @@ const app = express()
 const cors = require("cors")
 const db = require("./queries")
 const reg = require("./controllers/register")
+const log = require("./controllers/login")
 const port = process.env.PORT || 8000
 
 require("./configs/dotenv")
@@ -35,6 +36,7 @@ app.get("/categories", db.getCategories)
 app.get("/mechanics", db.getMechanics)
 
 app.post("/register", reg.register)
+app.post("/login", log.login)
 
 app.listen(port, () => {
   console.log(`App running on port ${port}`)
