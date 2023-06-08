@@ -43,11 +43,17 @@ const getMechanics = (request, response) => {
 //   })
 // }
 
-const addToVault = () => {
-  
+const addToVault = (request, response) => {
+  pool.query(`INSERT INTO vault_games (userID, gameID) VALUES (${request.userID, request.gameID}`, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200)
+  })
 }
 
 module.exports = {
   getCategories,
   getMechanics,
+  addToVault,
 }
