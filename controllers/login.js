@@ -31,6 +31,7 @@ exports.login = async (req, res) => {
           res.status(200).json({
             message: "User signed in!",
             token: token,
+            id: user[0].id
           })
         } else {
           if (result != true) {

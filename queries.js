@@ -44,7 +44,7 @@ const getMechanics = (request, response) => {
 // }
 
 const addToVault = (request, response) => {
-  pool.query(`INSERT INTO vault_games (userID, gameID) VALUES (${request.userID, request.gameID}`, (error, results) => {
+  pool.query(`INSERT INTO vault_games (user_id, game_id) VALUES ('${request.body.userID}', '${request.body.gameID}');`, (error, results) => {
     if (error) {
       throw error
     }
