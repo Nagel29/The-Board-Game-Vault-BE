@@ -34,6 +34,7 @@ app.use("/user", user)
 
 app.get("/categories", db.getCategories)
 app.get("/mechanics", db.getMechanics)
+app.post("/addToVault", db.addToVault)
 
 app.post("/register", reg.register)
 app.post("/login", log.login)

@@ -7,17 +7,18 @@ const jwt = require("jsonwebtoken")
 exports.login = async (req, res) => {
   const { username, password } = req.body
   try {
-    const data = await client.query(`SELECT * FROM users WHERE username= $1;`, [username])
+    const data = await client.query(`SELECT * FROM users WHERE username= $1;`, [
+      username,
+    ])
     const user = data.rows
     if (user.length === 0) {
       res.status(400).json({
-        error: "User is not registered, Sign Up first",
+        error: "User is not registered, please click the link below.",
       })
-    }
-    else {
+    } else {
       bcrypt.compare(password, user[0].password, (err, result) => {
         if (err) {
-          res.status(500).json({
+          return res.status(500).json({
             error: "Server error",
           })
         } else if (result === true) {
@@ -30,11 +31,12 @@ exports.login = async (req, res) => {
           res.status(200).json({
             message: "User signed in!",
             token: token,
+            id: user[0].id
           })
         } else {
           if (result != true) {
             res.status(400).json({
-              error: "Enter correct password!",
+              error: "Incorrect password, please try again.",
             })
           }
         }
@@ -43,7 +45,7 @@ exports.login = async (req, res) => {
   } catch (err) {
     console.log(err)
     res.status(500).json({
-      error: "Database error occured while signing in!"
+      error: "Database error occured while signing in!",
     })
   }
 }
