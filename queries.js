@@ -1,11 +1,11 @@
 const Pool = require("pg").Pool
 const pool = new Pool({
-  user: 'ryannagel',
-  host: 'localhost',
-  database: 'bgvbackend',
-  password: 'postgres',
-  port: 5432
-});
+  user: "ryannagel",
+  host: "localhost",
+  database: "bgvbackend",
+  password: "postgres",
+  port: 5432,
+})
 
 const getCategories = (request, response) => {
   pool.query("SELECT * FROM categories ORDER BY name ASC", (error, results) => {
@@ -44,12 +44,18 @@ const getMechanics = (request, response) => {
 // }
 
 const addToVault = (request, response) => {
-  pool.query(`INSERT INTO vault_games (user_id, game_id) VALUES ('${request.body.userID}', '${request.body.gameID}');`, (error, results) => {
-    if (error) {
-      throw error
+  pool.query(
+    `
+  INSERT INTO vault_games (user_id, game_data) 
+  VALUES ($1, $2);`,
+    [request.body.userID, request.body.game]
+  ),
+    (error) => {
+      if (error) {
+        throw error
+      }
+      response.status(200)
     }
-    response.status(200)
-  })
 }
 
 module.exports = {
