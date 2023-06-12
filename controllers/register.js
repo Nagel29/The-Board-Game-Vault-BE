@@ -28,7 +28,6 @@ exports.register = async (req, res) => {
         var flag = 1 //Declaring a flag
 
         //Inserting data into the database
-        console.log(user.username, user.password)
         client.query(
           `INSERT INTO users (username, password) VALUES ($1,$2);`,
           [user.username, user.password],
