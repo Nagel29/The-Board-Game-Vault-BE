@@ -34,6 +34,18 @@ const getMechanics = (request, response) => {
   })
 }
 
+const getVault = (request, response) => {
+  pool.query("SELECT * FROM vault_games WHERE user_id = $1",
+  [request.body.userID],
+  (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+
 // const getMechanicName = (request, response) => {
 //   pool.query("SELECT json_object_agg(id, name) FROM mechanics", (error, results) => {
 //     if (error) {
@@ -62,4 +74,5 @@ module.exports = {
   getCategories,
   getMechanics,
   addToVault,
+  getVault,
 }
