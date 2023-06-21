@@ -61,14 +61,12 @@ const addToVault = async (request, response) => {
     await pool.query(
       `
   INSERT INTO vault_games (user_id, game_id, games) 
-  VALUES ($1, $2, $3);`,
+  VALUES ($1, $2, $3)`,
       [request.body.userID, request.body.game.id, request.body.game]
     )
-    response
-      .status(200)
-      .json({
-        message: `${request.body.game.name} was successfully added to vault!`,
-      })
+    response.status(200).json({
+      message: `${request.body.game.name} was successfully added to vault!`,
+    })
   } catch (error) {
     if ((error.code = "23505")) {
       response.status(400).json({
@@ -84,13 +82,14 @@ const addToVault = async (request, response) => {
 
 const removeFromVault = async (request, response) => {
   try {
-    await pool.query(`
-    DELETE FROM vault_games WHERE user_id = $1 AND game_id = $2`
-        [request.body.userID, request.body.gameID]
-      )
-      response.status(200).json({
-        message: `${request.body.game.name} successfully removed from vault.`
-      })
+    await pool.query(
+      `
+    DELETE FROM vault_games WHERE user_id =$1 AND game_id = $2`,
+      [request.body.userID, request.body.gameID]
+    )
+    response.status(200).json({
+      message: `${request.body.game.name} successfully removed from vault.`,
+    })
   } catch (error) {
     response.status(500).json({
       message: "We ran into a problem. Please try again later.",
