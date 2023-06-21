@@ -13,7 +13,7 @@ exports.register = async (req, res) => {
     const arr = data.rows
     if (arr.length != 0) {
       return res.status(400).json({
-        error: "Email already there, No need to register again.",
+        error: "Username already exists.",
       })
     } else {
       bcrypt.hash(password, 10, (err, hash) => {
