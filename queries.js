@@ -34,17 +34,25 @@ const getMechanics = (request, response) => {
   })
 }
 
-const getVault = (request, response) => {
-  pool.query(
-    "SELECT * FROM vault_games WHERE user_id = $1",
-    [request.body.userID],
+const getVault = async (request, response) => {
+  let games = await pool.query("SELECT * FROM vault_games WHERE user_id = $1", [
+    request.body.userID,
+  ])
+  let gameIDs = await pool.query(
+    "SELECT game_id from vault_games WHERE user_id = $1",
+    [request.body.userID]
+  )
+  response
+    .status(200)
+    .json({
+      games: games.rows,
+      gameIDs: gameIDs.rows.map((game) => game["game_id"]),
+    }),
     (error, results) => {
       if (error) {
         throw error
       }
-      response.status(200).json(results.rows)
     }
-  )
 }
 
 // const getMechanicName = (request, response) => {
@@ -64,8 +72,13 @@ const addToVault = async (request, response) => {
   VALUES ($1, $2, $3)`,
       [request.body.userID, request.body.game.id, request.body.game]
     )
+    let updatedList = await pool.query(
+      `SELECT game_id FROM vault_games WHERE user_id = $1`,
+      [request.body.userID]
+    )
     response.status(200).json({
       message: `${request.body.game.name} was successfully added to vault!`,
+      vaultList: updatedList.rows.map((game) => game["game_id"]),
     })
   } catch (error) {
     if ((error.code = "23505")) {
@@ -87,8 +100,14 @@ const removeFromVault = async (request, response) => {
     DELETE FROM vault_games WHERE user_id =$1 AND game_id = $2`,
       [request.body.userID, request.body.gameID]
     )
+    let updatedList = await pool.query(
+      `SELECT game_id FROM vault_games WHERE user_id = $1`,
+      [request.body.userID]
+    )
+
     response.status(200).json({
       message: `${request.body.game.name} successfully removed from vault.`,
+      vaultList: updatedList.rows.map((game) => game["game_id"]),
     })
   } catch (error) {
     response.status(500).json({
