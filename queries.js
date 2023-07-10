@@ -45,7 +45,7 @@ const getVault = async (request, response) => {
   response
     .status(200)
     .json({
-      games: games.rows,
+      vaultGames: games.rows,
       gameIDs: gameIDs.rows.map((game) => game["game_id"]),
     }),
     (error, results) => {
@@ -68,7 +68,7 @@ const addToVault = async (request, response) => {
   try {
     await pool.query(
       `
-  INSERT INTO vault_games (user_id, game_id, games) 
+  INSERT INTO vault_games (user_id, game_id, game_info) 
   VALUES ($1, $2, $3)`,
       [request.body.userID, request.body.game.id, request.body.game]
     )
